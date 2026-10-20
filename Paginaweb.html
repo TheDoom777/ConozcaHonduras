@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Honduras | Descubre tu país</title>
+<style>
+
+:root{
+  --navy:#06485a;
+  --teal:#00A6AD;
+  --turquoise:#00A6AD;
+  --turquoise-light:#dff7f8;
+  --pale:#effbfc;
+  --ink:#123c4b;
+  --muted:#587783;
+  --sidebar-color:#00A6AD;
+  --white:#ffffff;
+  --sidebar:250px;
+}
+*{box-sizing:border-box}img{max-width:100%}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--pale);color:var(--ink);text-align:center;overflow:hidden}
+.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);height:100vh;background:var(--sidebar-color);color:#fff;display:flex;flex-direction:column;align-items:stretch;padding:25px 17px 20px;z-index:20;box-shadow:4px 0 20px rgba(3,49,62,.16)}
+.brand{display:flex;flex-direction:column;align-items:center;padding:10px 8px 27px;border-bottom:1px solid rgba(255,255,255,.2)}
+/* LOGO: sustituye el bloque brand-logo-placeholder por tu imagen de logo */
+.brand-logo{width:100%;height:150px;max-height:20vh;object-fit:contain;display:block;margin:0 0 14px;padding:3px;transform:scale(1.08);transform-origin:center}
+.brand strong{font-size:21px;letter-spacing:1.3px}.brand small{margin-top:7px;color:#b8e7eb;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.nav-label{color:#e0ffff;text-align:left;font-size:10px;font-weight:bold;letter-spacing:1.8px;margin:26px 12px 10px;text-transform:uppercase}
+.nav-links{display:flex;flex-direction:column;gap:7px}
+.nav-links a{display:flex;align-items:center;gap:15px;padding:14px 14px;color:#d9f2f4;text-decoration:none;text-align:left;border-radius:10px;font-size:14px;font-weight:600;transition:background .2s,color .2s;min-height:58px}
+.nav-links a:hover,.nav-links a.active{background:rgba(0,75,88,.24);color:#fff}
+.nav-icon{width:34px;text-align:center;font-size:24px;flex-shrink:0}.nav-icon-img{width:36px;height:36px;object-fit:contain;flex:0 0 36px;display:block}
+.sidebar-note{margin-top:auto;padding:18px 12px 0;border-top:1px solid rgba(255,255,255,.2);text-align:left;color:#b9dce0;font-size:12px;line-height:1.6}.sidebar-note strong{display:block;color:#fff;font-size:13px;margin-bottom:4px}
+.main-scroll{height:100vh;margin-left:var(--sidebar);overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;overscroll-behavior:contain;background:var(--pale)}
+.hero{min-height:270px;display:flex;align-items:center;text-align:left;padding:36px clamp(24px,5vw,76px);color:#fff;background-image:linear-gradient(90deg,rgba(3,43,58,.82) 0%,rgba(3,67,79,.45) 53%,rgba(3,67,79,.08) 100%),url('imagenes/banner.png');background-size:cover;background-position:center 52%;position:relative}
+.hero-content{max-width:720px}.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:bold;color:#bff7f8;margin:0 0 10px}.hero h1{font-size:clamp(34px,4vw,58px);line-height:1.02;margin:0 0 12px;letter-spacing:-1.5px}.hero h1 span{color:#56e1e5}.hero-lead{font-size:clamp(15px,1.4vw,19px);line-height:1.5;margin:0 0 8px;font-weight:600}.hero-copy{font-size:14px;line-height:1.65;color:#e0f7f8;max-width:580px;margin:0 0 20px}.hero-button{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:30px;padding:12px 19px;background:var(--turquoise);color:#053b4c;text-decoration:none;font-size:13px;font-weight:bold;transition:transform .2s,background .2s}.hero-button:hover{background:#58dce1;transform:translateY(-2px)}
+.content-wrap{max-width:1500px;margin:0 auto;padding:34px clamp(18px,3.5vw,54px) 42px}
+.section-heading{margin:0 0 8px;color:var(--navy);font-size:clamp(24px,2.5vw,32px);letter-spacing:-.5px}.section-intro{margin:0 auto 25px;max-width:760px;color:var(--muted);font-size:15px;line-height:1.65}
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr) 235px;gap:22px;align-items:stretch;text-align:left}
+.map-panel{min-width:0;padding:17px;background:#fff;border:1px solid #c9edf0;border-radius:18px;box-shadow:0 8px 28px rgba(5,58,77,.08)}
+.map-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px 13px}.map-caption strong{font-size:16px;color:var(--navy)}.map-caption span{font-size:12px;color:var(--muted)}
+/* Fondo suave alrededor del mapa; el JavaScript y los polígonos interactivos se conservan */
+.mapa-svg-contenedor{position:relative;width:100%;max-width:100%;margin:0 auto;background:#d9f4f4;border:1px solid #b7e8eb;border-radius:12px;overflow:hidden;box-shadow:none}
+.mapa-svg-contenedor img{width:100%;height:auto;display:block}.capa-interactiva{position:absolute;top:0;left:0;width:100%;height:100%}.depto-region{fill:transparent;cursor:pointer;transition:fill .2s ease,opacity .2s ease}.depto-region:hover{fill:rgba(255,255,255,.35);stroke:#fff;stroke-width:2px}
+.stats-panel{background:#e0f7f8;border:1px solid #bce9ec;border-radius:18px;padding:22px 19px;display:flex;flex-direction:column;justify-content:center;gap:0;box-shadow:none}.stat{display:flex;align-items:center;gap:13px;padding:17px 0;border-bottom:1px solid #bce5e8}.stat:first-child{padding-top:0}.stat:last-child{border-bottom:0;padding-bottom:0}.stat-icon{display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;border-radius:12px;background:#fff;color:var(--teal);font-size:22px}.stat-icon img{width:26px;height:26px;object-fit:contain;display:block}.stat strong{display:block;font-size:23px;color:var(--navy);line-height:1.1}.stat span{display:block;font-size:12px;color:var(--muted);margin-top:5px;line-height:1.35}
+.section-block{padding:48px 0 8px;scroll-margin-top:22px}.section-topline{width:54px;height:4px;border-radius:4px;background:var(--turquoise);margin:0 auto 14px}
+/* Cuadrícula de 15 atractivos turísticos: reemplaza cada bloque photo-placeholder por una etiqueta img */
+.places-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;text-align:left}
+.place-card,.story-card,.symbol-card{background:#fff;border:1px solid #ccebed;border-radius:14px;overflow:hidden;box-shadow:0 5px 16px rgba(3,65,77,.05)}
+.place-card{transition:transform .2s,border-color .2s}.place-card:hover{transform:translateY(-3px);border-color:#65cdd4}
+.photo-placeholder{height:245px;background:#d6f1f2;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;color:#087f8c;font-size:12px;font-weight:bold;letter-spacing:.5px;border-bottom:1px solid #c1e9eb}.place-image{width:100%;height:245px;display:block;object-fit:cover;border-bottom:1px solid #c1e9eb}
+.place-card figcaption{padding:13px 15px 16px;color:var(--navy);font-size:15px;font-weight:bold;line-height:1.4}
+.place-card figcaption small{display:block;margin-top:5px;color:var(--muted);font-size:12px;font-weight:normal}
+.story-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;text-align:left}
+.story-card{display:grid;grid-template-columns:42% 1fr;min-height:210px}
+.story-photo{min-height:210px;background:#d6f1f2;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;color:#087f8c;font-size:12px;font-weight:bold;border-right:1px solid #c1e9eb}
+.story-copy{padding:20px}.story-copy .story-date{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#087f8c;font-weight:bold}.story-copy h3{font-size:18px;line-height:1.35;color:var(--navy);margin:8px 0}.story-copy p{font-size:13px;line-height:1.7;color:var(--muted);margin:0}
+.symbol-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;text-align:left}
+.symbol-card .symbol-photo{width:100%;height:225px;display:block;object-fit:cover;background:#d6f1f2;padding:0;border-bottom:1px solid #c1e9eb}
+.symbol-card .symbol-copy{padding:15px 16px 18px;text-align:center}.symbol-card h3{margin:0;color:var(--navy);font-size:16px}.symbol-card p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+footer{background:var(--navy);color:#c5e8eb;padding:24px 18px;margin-top:46px;font-size:12px;line-height:1.7}footer strong{display:block;color:#fff;font-size:14px;margin-bottom:4px}
+#fondo-modal{display:none;position:fixed;inset:0;background:rgba(2,24,34,.66);backdrop-filter:blur(3px);z-index:99}
+#informacion{display:none;position:fixed;top:50%;left:calc(50% + var(--sidebar)/2);transform:translate(-50%,-50%);width:1120px;max-width:calc(100vw - var(--sidebar) - 36px);max-height:92vh;overflow-y:auto;background:#fff;padding:34px 36px 28px;border-radius:22px;box-shadow:0 22px 70px rgba(0,0,0,.34);z-index:100;text-align:left;border:1px solid #c9edef}
+#informacion h2{color:#fff;background:var(--teal);margin:-34px -36px 24px;padding:25px 24px;text-align:left;font-size:clamp(28px,3vw,40px);letter-spacing:.5px;border-radius:21px 21px 0 0}#informacion p{line-height:1.8;font-size:16px;color:#294653}.subtitulo-lugares,.titulo-video{color:var(--teal);text-align:left;font-size:clamp(20px,2vw,26px);margin:30px 0 18px}.tarjetas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:20px}.tarjeta{width:auto;text-align:left;background:#f4fcfc;border:1px solid #d2eef0;border-radius:15px;overflow:hidden;box-shadow:0 6px 20px rgba(3,65,77,.07);transition:transform .2s,box-shadow .2s}.tarjeta:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(3,65,77,.13)}.tarjeta img{width:100%;height:250px;object-fit:cover;border-radius:0;display:block;background:#d6f1f2}.tarjeta h3{color:var(--teal);font-size:18px;line-height:1.35;margin:13px 15px 6px}.tarjeta p{font-size:14px;line-height:1.65;margin:0;padding:0 15px 18px;color:#42616a}.video-local{width:100%;max-height:440px;border-radius:10px;background:#000;display:block;margin:20px auto}.contenedor-boton{text-align:center;margin-top:22px}.cerrar{background:var(--teal);color:#fff;border:0;padding:11px 27px;border-radius:24px;cursor:pointer;font-size:14px;font-weight:bold}.cerrar:hover{background:var(--navy)}
+@media(max-width:1050px){:root{--sidebar:220px}.tarjeta img{height:210px}.map-layout{grid-template-columns:1fr}.stats-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}.stat:nth-child(3){border-bottom:0}.places-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.story-grid{grid-template-columns:1fr}}
+@media(max-width:700px){:root{--sidebar:72px}.sidebar{padding:18px 8px 12px}.brand{padding:4px 0 18px}.brand-logo{height:58px;max-height:none;padding:2px;transform:none}.brand strong,.brand small,.nav-label,.nav-text,.sidebar-note{display:none}.nav-links{margin-top:20px;gap:10px}.nav-links a{justify-content:center;padding:13px 5px}.nav-icon{font-size:22px}.nav-icon-img{width:30px;height:30px;flex-basis:30px}.hero{min-height:300px;padding:30px 22px;background-position:center}.hero h1{font-size:36px}.content-wrap{padding:25px 14px 32px}.map-panel{padding:9px}.map-caption{align-items:flex-start;flex-direction:column}.stats-panel{padding:15px;grid-template-columns:1fr 1fr}.stat{gap:8px;padding:13px 0}.stat-icon{width:34px;height:34px;font-size:18px}.stat strong{font-size:19px}.places-grid,.symbol-grid{grid-template-columns:1fr}.story-card{grid-template-columns:1fr}.story-photo{min-height:170px;border-right:0;border-bottom:1px solid #c1e9eb}.photo-placeholder{height:200px}.place-image{height:200px}.section-block{padding-top:35px}#informacion{left:50%;width:calc(100vw - 24px);max-width:calc(100vw - 24px);padding:20px;max-height:92vh}.tarjetas{grid-template-columns:1fr}.tarjeta{width:100%}.tarjeta img{height:230px}#informacion h2{margin:-20px -20px 20px;padding:22px 20px}}
+@media(min-width:701px) and (max-width:1050px){.brand-logo{height:125px}.nav-icon-img{width:32px;height:32px;flex-basis:32px}#informacion{left:calc(50% + var(--sidebar)/2);width:calc(100vw - var(--sidebar) - 28px);padding:28px}.tarjetas{gap:14px}.tarjeta img{height:205px}#informacion h2{margin:-28px -28px 22px;padding:23px 28px}}
+@media(prefers-reduced-motion:reduce){html,.main-scroll{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+
+</style>
+</head>
+<body>
+	<audio id="musica-fondo" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+<aside class="sidebar">
+  <div class="brand">
+    <!-- LOGOTIPO: cambia esta ruta por la ubicación de tu logo. -->
+    <img class="brand-logo" src="imagenes/Logo.png" alt="Logotipo de Honduras">
+    <marquee><strong>Descubre tu país</strong></marquee>
+  </div>
+  <nav class="nav-links" aria-label="Navegación principal">
+    <a class="active" href="#inicio"><img class="nav-icon-img" src="imagenes/1.1.png" alt=""><span class="nav-text">Inicio</span></a>
+    <a href="#departamentos"><img class="nav-icon-img" src="imagenes/1.4.png" alt=""><span class="nav-text">Mapa de departamentos</span></a>
+    <a href="#lugares"><img class="nav-icon-img" src="imagenes/1.2.png" alt=""><span class="nav-text">Lugares turísticos</span></a>
+    <a href="#simbolos"><img class="nav-icon-img" src="imagenes/1.3.png" alt=""><span class="nav-text">Símbolos patrios</span></a>
+	<a href="#proceres"><img class="nav-icon-img" src="imagenes/Emblema de escudo con estrella y laureles.png" alt=""><span class="nav-text">Proceres</span></a>
+  </nav>
+  <div class="sidebar-note"><strong>Honduras te espera</strong>18 departamentos llenos de historia, cultura y belleza natural.</div>
+</aside>
+
+<main class="main-scroll" id="contenido-principal">
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <marquee><h1>Bienvenido a Honduras<span>.</span></h1></marquee>
+      <p class="hero-lead">Un país, 18 departamentos, infinitas experiencias.</p>
+      <p class="hero-copy">Descubre la diversidad de nuestra tierra, desde sus playas cristalinas hasta sus montañas, su gente y su rica cultura.</p>
+    </div>
+  </section>
+
+  <div class="content-wrap">
+    <section id="departamentos" aria-labelledby="titulo-mapa">
+      <div class="section-topline"></div>
+      <h2 class="section-heading" id="titulo-mapa">Explora los 18 departamentos</h2>
+      <p class="section-intro">Selecciona una zona del mapa para conocer sus atractivos, historia y lugares que hacen especial a cada rincón de Honduras.</p>
+      <div class="map-layout">
+        <div class="map-panel">
+          <div class="map-caption"><strong>Mapa interactivo de Honduras</strong><span>Haz clic sobre un departamento</span></div>
+              <div class="mapa-svg-contenedor">
+
+
+        <img 
+            src="mapa-honduras.png.jpg"
+            width="1344"
+            height="784"
+            alt="Mapa de los departamentos de Honduras"
+        >
+
+
+        <svg 
+            class="capa-interactiva"
+            viewBox="0 0 1000 600"
+            preserveAspectRatio="none"
+        >
+
+
+            <!-- ========================================= -->
+            <!-- COLÓN -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="500,115 680,110 680,215 500,190"
+                onclick="mostrarDepartamento('colon')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- CORTÉS -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="190,160 200,160 260,160 250,205 190,190"
+                onclick="mostrarDepartamento('cortes')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- ISLAS DE LA BAHÍA -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="370,40 600,25 600,90 370,100"
+                onclick="mostrarDepartamento('islas')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- GRACIAS A DIOS -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="690,90 990,230 870,330 690,301"
+                onclick="mostrarDepartamento('gracias')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- ATLÁNTIDA -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="285,180 470,180 470,140 280,140"
+                onclick="mostrarDepartamento('atlantida')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- SANTA BÁRBARA -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="115,210 210,200 220,310 180,310"
+                onclick="mostrarDepartamento('santaBarbara')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- COPÁN -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="40,270 114,220 130,250 100,330"
+                onclick="mostrarDepartamento('copan')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- OCOTEPEQUE -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="20,320 110,320 120,355 40,370"
+                onclick="mostrarDepartamento('ocotepeque')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- LEMPIRA -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="120,285 180,300 170,405 100,400"
+                onclick="mostrarDepartamento('lempira')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- INTIBUCÁ -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="180,330 240,330 220,400 175,400"
+                onclick="mostrarDepartamento('intibuca')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- COMAYAGUA -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="220,290 300,260 350,310 260,350"
+                onclick="mostrarDepartamento('comayagua')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- YORO -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="260,190 490,185 350,280 280,260"
+                onclick="mostrarDepartamento('yoro')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- OLANCHO -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="430,220 660,220 660,370 450,360"
+                onclick="mostrarDepartamento('olancho')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- FRANCISCO MORAZÁN -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="340,290 415,290 390,440 300,450"
+                onclick="mostrarDepartamento('francisco')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- LA PAZ -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="210,370 280,370 300,430 210,430"
+                onclick="mostrarDepartamento('lapaz')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- EL PARAÍSO -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="400,380 540,390 515,450 400,460"
+                onclick="mostrarDepartamento('paraiso')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- VALLE -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="250,450 295,450 335,510 280,520"
+                onclick="mostrarDepartamento('valle')"
+            >
+            </polygon>
+
+
+
+            <!-- ========================================= -->
+            <!-- CHOLUTECA -->
+            <!-- ========================================= -->
+
+            <polygon
+                class="depto-region"
+                points="325,490 430,490 370,570 330,560"
+                onclick="mostrarDepartamento('choluteca')"
+            >
+            </polygon>
+
+
+        </svg>
+
+    </div>
+        </div>
+        <aside class="stats-panel" aria-label="Datos de Honduras">
+          <div class="stat"><div class="stat-icon"><img src="imagenes/1.png" alt=""></div><div><strong>18</strong><span>departamentos</span></div></div>
+          <div class="stat"><div class="stat-icon"><img src="imagenes/2.png" alt=""></div><div><strong>298</strong><span>municipios</span></div></div>
+          <div class="stat"><div class="stat-icon"><img src="imagenes/3.png" alt=""></div><div><strong>112,777 km²</strong><span>de territorio</span></div></div>
+          <div class="stat"><div class="stat-icon"><img src="imagenes/4.png" alt=""></div><div><strong style="font-size:16px">Una tierra llena</strong><span>de historia, cultura y belleza natural.</span></div></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-block" id="lugares">
+      <div class="section-topline"></div>
+      <h2 class="section-heading">Lugares que enamoran</h2>
+      <p class="section-intro">Descubre paisajes, sitios históricos y destinos inolvidables de Honduras.</p>
+      <div class="places-grid">
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-01.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/Copan.1.jpg" alt="Lugar turístico 01">
+          <figcaption>Ruinas de Copán<small>Copán Ruinas / Copán</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-02.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/LagoYojoa.2.jpg" alt="Lugar turístico 02">
+          <figcaption>Lago de Yojoa<small>Cortés, Santa Barbara y Comayagua </small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-03.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/PlayasTela.3.jpg" alt="Lugar turístico 03">
+          <figcaption>Playas de Tela<small>Tela / Atlantida</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-04.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/CuevasdeTaulbae.4.jpg" alt="Lugar turístico 04">
+          <figcaption>Cuevas de Taulabé<small>Taulabé / Comayagua</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-05.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/5. Cayos Cochinos.jpg" alt="Lugar turístico 05">
+          <figcaption>Cayos Cochinos<small>Roatán / Islas de la Bahia</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-06.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/6. Panacam.jpg" alt="Lugar turístico 06">
+          <figcaption>PANACAM (Parque Nacional Cerro Azul Meámbar) <small>Santa Cruz de Yojoa / Cortés</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-07.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/7. cataratas de pualhazak.jpg" alt="Lugar turístico 07">
+          <figcaption>Cataratas de Pulhapanzak<small>San Francisco de Yojoa / Cortés</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-08.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/8. punta sal.jpg" alt="Lugar turístico 08">
+          <figcaption>Punta Sal (Parque Nacional Jeannette Kawas)<small>Tela / Atlantida</small></figcaption>
+        </figure>
+        <figure class="place-card">
+          <!-- Para agregar la foto, reemplaza el div siguiente por: <img class="place-image" src="imagenes/lugares/lugar-09.jpg" alt="Nombre del lugar turístico"> -->
+          <img class="place-image" src="imagenes/09. Comayagua.jpg" alt="Lugar turístico 09">
+          <figcaption>Catedral Inmaculada Concepción<small>Comayagua / Comayagua</small></figcaption>
+		</figure>
+      </div>
+    </section>
+
+    <section class="section-block" id="simbolos">
+      <div class="section-topline"></div>
+      <h2 class="section-heading">Símbolos patrios de Honduras</h2>
+      <p class="section-intro">Emblemas nacionales y símbolos que representan la identidad hondureña.</p>
+      <!-- Agrega o elimina tarjetas según los símbolos que incluirás -->
+      <div class="symbol-grid">
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/bandera.jpg" alt="Bandera Nacional"> -->
+          <img class="symbol-photo" src="imagenes/Bandera.jpg" alt="Bandera Nacional">
+          <div class="symbol-copy"><h3>Bandera Nacional</h3><p>Representa la identidad, la unidad y la soberanía de Honduras. Sus cinco estrellas simbolizan los países de Centroamérica.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/escudo.jpg" alt="Escudo Nacional"> -->
+          <img class="symbol-photo" src="imagenes/escudo nacional.jpg" alt="Escudo Nacional">
+          <div class="symbol-copy"><h3>Escudo Nacional</h3><p>Representa la historia, la riqueza natural y los recursos del territorio hondureño.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/himno.jpg" alt="Himno Nacional"> -->
+          <img class="symbol-photo" src="imagenes/Himno Nacional.jpg" alt="Himno Nacional">
+          <div class="symbol-copy"><h3>Himno Nacional</h3><p>Es el canto patriótico que expresa la historia, el amor y el respeto por Honduras.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/ave.jpg" alt="Ave nacional"> -->
+          <img class="symbol-photo" src="imagenes/ave nacional.jpg" alt="Ave nacional">
+          <div class="symbol-copy"><h3>Ave Nacional (Guacamaya roja)</h3><p>Representa la belleza y la riqueza de la fauna hondureña.</p></div>
+        </article>
+		  <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/ave.jpg" alt="Ave nacional"> -->
+          <img class="symbol-photo" src="imagenes/mamifero nacional.jpg" alt="Ave nacional">
+          <div class="symbol-copy"><h3>Mamífero Nacional (Venado cola blanca)</h3><p>Simboliza la fauna silvestre y la riqueza natural del país.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/flor.jpg" alt="Flor nacional"> -->
+          <img class="symbol-photo" src="imagenes/flor nacional.jpg" alt="Flor nacional">
+          <div class="symbol-copy"><h3>Flor Nacional (Orquídea Rhyncholaelia digbyana)</h3><p>imboliza la belleza y la diversidad natural del país.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/arbol.jpg" alt="Árbol nacional"> -->
+          <img class="symbol-photo" src="imagenes/arbol nacional.jpg" alt="Árbol nacional">
+          <div class="symbol-copy"><h3>Árbol Nacional (Pino)</h3><p>Representa la riqueza forestal y los recursos naturales de Honduras.</p></div>
+        </article>
+		  <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/arbol.jpg" alt="Árbol nacional"> -->
+          <img class="symbol-photo" src="imagenes/mapa nacional.jpg" alt="Árbol nacional">
+          <div class="symbol-copy"><h3>Mapa nacional</h3><p>Representa el territorio de Honduras, sus límites geográficos y su ubicación en Centroamérica.</p></div>
+        </article>
+      </div>
+    </section>
+	  
+	   <section class="section-block" id="proceres">
+      <div class="section-topline"></div>
+      <h2 class="section-heading">Proceres de Honduras</h2>
+      <p class="section-intro">Emblemas nacionales y símbolos que representan la identidad hondureña.</p>
+      <!-- Agrega o elimina tarjetas según los símbolos que incluirás -->
+      <div class="symbol-grid">
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/bandera.jpg" alt="Bandera Nacional"> -->
+          <img class="symbol-photo" src="imagenes/Jose Cecilio.jpg" alt="José Cecilia del Valle">
+          <div class="symbol-copy"><h3>José Cecilio del Valle</h3><p>Redactó el Acta de Independencia de Centroamérica.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/escudo.jpg" alt="Escudo Nacional"> -->
+          <img class="symbol-photo" src="imagenes/Dionisio de herrera.jpg" alt="Dionisio de Herrera">
+          <div class="symbol-copy"><h3>Dionisio de Herrera</h3><p>Fue el primer jefe de Estado de Honduras.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/himno.jpg" alt="Himno Nacional"> -->
+          <img class="symbol-photo" src="imagenes/Morazan.jpeg" alt="Francisco Morazán">
+          <div class="symbol-copy"><h3>Francisco Morazán</h3><p>Luchó por la unión de Centroamérica.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/ave.jpg" alt="Ave nacional"> -->
+          <img class="symbol-photo" src="imagenes/Jose trinidad.jpeg" alt="José Trinidad Cabañas">
+          <div class="symbol-copy"><h3>José Trinidad Cabañas</h3><p>Militar y presidente de Honduras, reconocido por sus ideales de justicia.</p></div>
+        </article>
+		  <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/ave.jpg" alt="Ave nacional"> -->
+          <img class="symbol-photo" src="imagenes/Jose trinidad reyes.png" alt="José Trinidad Reyes">
+          <div class="symbol-copy"><h3>José Trinidad Reyes</h3><p>Fundador de la institución que dio origen a la UNAH.</p></div>
+        </article>
+        <article class="symbol-card">
+          <!-- Reemplaza este bloque por <img class="symbol-photo" src="imagenes/simbolos/flor.jpg" alt="Flor nacional"> -->
+          <img class="symbol-photo" src="imagenes/Cacique Lempira.jpeg" alt="Cacique Lempira">
+          <div class="symbol-copy"><h3>Cacique Lempira</h3><p>Líder indígena que resistió la conquista española.</p></div>
+        </article>
+     
+      </div>
+    </section>
+    <footer><strong>Honduras · Descubre tu país</strong>Proyecto educativo sobre los departamentos, su cultura, historia y atractivos turísticos.</footer>
+  </div>
+</main>
+
+<div id="fondo-modal" onclick="cerrarInfo()"></div>
+<div id="informacion" role="dialog" aria-modal="true" aria-labelledby="titulo">
+  <h2 id="titulo"><marquee behavior="scroll" direction="left">Departamento</marquee></h2>
+  <div id="cuerpo-info"></div>
+  <div class="contenedor-boton"><button class="cerrar" onclick="cerrarInfo()">Cerrar</button></div>
+</div>
+
+<script>
+
+
+/* ================================================= */
+/* INFORMACIÓN DE LOS 18 DEPARTAMENTOS */
+/* ================================================= */
+
+const departamentos = {
+
+
+    /* ========================================= */
+    /* COLÓN */
+    /* ========================================= */
+
+    colon: {
+
+        nombre: "Colón",
+
+        texto: `
+            Creado el 19 de diciembre de 1891, aunque con raíces históricas
+            desde la época colonial como uno de los territorios más extensos
+            del norte. Su cabecera es Trujillo, sitio donde desembarcó
+            Cristóbal Colón por primera vez en tierra firme de América en 1502.
+        `,
+
+        lugares: [
+
+            {
+                imagen: "La Fortaleza de Santa Bárbara en Trujillo (baluarte histórico colonial frente a la bahía).png.webp",
+                titulo: "La Fortaleza",
+                descripcion: "De Santa Bárbara en Trujillo fue una edificación de carácter militar construida durante la época colonial."
+            },
+
+            {
+                imagen: "Parque Nacional Capiro y Calentura (reserva natural con miradores hacia el mar Caribe y petroglifos).png",
+                titulo: "Parque Nacional Capiro y Calentura",
+                descripcion: "Se encuentra en Trujillo y destaca por sus paisajes naturales y miradores."
+            },
+
+            {
+                imagen: "Laguna de Guaimoreto (excelente para paseos en lancha, pesca y observación de manglares y aves).png",
+                titulo: "Laguna de Guaimoreto",
+                descripcion: "Es un refugio de vida silvestre ubicado cerca de Trujillo, en el departamento de Colón."
+            }
+
+        ],
+
+        video: "video sobre colon.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* CORTÉS */
+    /* ========================================= */
+
+    cortes: {
+
+        nombre: "Cortés",
+
+        texto: "Fue fundado el 4 de julio de 1893 bajo el gobierno de Domingo Vásquez, tomando territorios que administrativamente correspondían a Santa Bárbara, con el fin de potenciar el desarrollo mercantil de San Pedro Sula y Puerto Cortés.",
+
+        lugares: [
+
+            {
+                imagen: "Cataratas de Pulhapanzak (impresionante salto de agua de 43 metros en el río Lindo).png",
+                titulo: "Cataratas de Pulhapanzak",
+                descripcion: "Se formaron hace miles de años debido a una antigua erupción volcánica que dejó flujos de lava por donde hoy corre el río Honduras Tips."
+            },
+
+            {
+                imagen: "Fortaleza de San Fernando de Omoa (la estructura de defensa militar española más grande de Centroamérica).png",
+                titulo: "Fortaleza de San Fernando de Omoa",
+                descripcion: "De San Fernando de Omoa tiene una parte de su estructura construida con bloques de coral marino extraídos de los arrecifes del Caribe."
+            },
+
+            {
+                imagen: "Parque Nacional Cusuco (refugio de biodiversidad y bosque nuboso cerca de San Pedro Sula).png",
+                titulo: "Parque Nacional Cusuco",
+                descripcion: "Alberga el 55% de todas las especies de murciélagos que existen en Honduras (unas 70 de las 120 registradas en el país)."
+            }
+
+        ],
+
+        video: "Video sobre cortes.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* ISLAS DE LA BAHÍA */
+    /* ========================================= */
+
+    islas: {
+
+        nombre: "Islas de la Bahía",
+
+        texto: "Creado oficialmente como departamento el 14 de mayo de 1872 bajo la presidencia de Céleo Arias, formalizando la soberanía hondureña sobre las islas caribeñas (Roatán, Utila y Guanaja) tras la devolución por parte de Gran Bretaña.",
+
+        lugares: [
+
+            {
+                imagen: "Playa West Bay en Roatán (famosa mundialmente por su arena blanca y cercanía con la segunda barrera de arrecife más grande del mundo).png",
+                titulo: "Playa West Bay en Roatán",
+                descripcion: "Es famosa mundialmente por su arena blanca y cercanía con la segunda barrera de arrecife más grande del mundo."
+            },
+
+            {
+                imagen: "Puntos de Buceo en Utila (santuario internacional para el avistamiento de tiburones ballena).png",
+                titulo: "Puntos de Buceo en Utila",
+                descripcion: "En los puntos de buceo de Utila es posible avistar al tiburón ballena (el pez más grande del mundo) durante todo el año."
+            },
+
+            {
+                imagen: "Cayos Cochinos (monumento marino protegido de aguas cristalinas y prístinas).png",
+                titulo: "Cayos Cochinos",
+                descripcion: "Albergan a la famosa boa rosada, una serpiente endémica y única en el planeta que solo habita en este pequeño archipiélago."
+            }
+
+        ],
+
+        video: "Video sobre islas de la bahía.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* GRACIAS A DIOS */
+    /* ========================================= */
+
+    gracias: {
+
+        nombre: "Gracias a Dios",
+
+        texto: "Creado el 21 de febrero de 1957 bajo la administración de Julio Lozano Díaz, integrando oficialmente la región de la Mosquitia para afianzar la soberanía nacional en el extremo noreste del territorio tras el fallo limítrofe.",
+
+        lugares: [
+
+            {
+                imagen: "Reserva de la Biosfera del Río Plátano (Patrimonio de la Humanidad por la UNESCO, hogar de selvas vírgenes y rica cultura indígena).png",
+                titulo: "Reserva de la Biosfera del Río Plátano",
+                descripcion: "Guarda en su interior el misterio de la legendaria Ciudad Blanca, una metrópoli precolombina oculta en la selva que las leyendas de la etnia Pech llamaban kaha kamasa."
+            },
+
+            {
+                imagen: "Laguna de Caratasca (sistema lagunar costero de gran riqueza biológica).png",
+                titulo: "Laguna de Caratasca",
+                descripcion: "Ubicada en el departamento de Gracias a Dios en La Mosquitia hondureña, es el sistema lagunar costero más grande de Honduras, con una extensión de unos 1,100 kilómetros cuadrados."
+            },
+
+            {
+                imagen: "Comunidades Tawahkas y Misquitas (experiencias de turismo vivencial y antropológico).png",
+                titulo: "Comunidades Tawahkas y Misquitas",
+                descripcion: "las comunidades Tawahkas y Misquitas en La Mosquitia hondureña es su profunda interconexión lingüística y espiritual, donde lo humano y la naturaleza no se separan."
+            }
+
+        ],
+
+        video: "Video sobre gracias a Dios.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* ATLÁNTIDA */
+    /* ========================================= */
+
+    atlantida: {
+
+        nombre: "Atlántida",
+
+        texto: "Fue creado oficialmente el 24 de febrero de 1902 bajo la presidencia de Terencio Sierra, tomando territorios que antes pertenecían a los departamentos de Colón y Yoro, impulsado por el auge bananero y portuario de la costa norte.",
+
+        lugares: [
+
+            {
+                imagen: "Parque Nacional Pico Bonito (majestuosas montañas, senderos y ríos ideales para el ráfting).png",
+                titulo: "Parque Nacional Pico Bonito",
+                descripcion: "Es una de las formaciones montañosas más altas ubicadas directamente frente al mar Caribe en toda la franja que va desde Colombia hasta la Florida."
+            },
+
+            {
+                imagen: "Refugio de Vida Silvestre Cuero y Salado (zona protegida donde se pueden avistar manatíes en trencito histórico).png",
+                titulo: "Refugio de Vida Silvestre Cuero y Salado",
+                descripcion: "obtuvo su nombre de la combinación exacta de los dos ríos que lo delimitan (el río Cuero y el río Salado) y las dos comunidades costeras ubicadas en sus extremos."
+            },
+
+            {
+                imagen: "Playas de Tela y sus comunidades garífunas como Sambo Creek y Triunfo de la Cruz.png",
+                titulo: "Playas de Tela y sus comunidades garífunas",
+                descripcion: "Fue fundada originalmente en 1524 por los españoles bajo el nombre de Villa de El Triunfo de la Cruz, lo que la convierte en uno de los asentamientos europeos más antiguos de Honduras antes de ser habitada y reestablecida por el pueblo garífuna tras su llegada al país en 1797."
+            }
+
+        ],
+
+        video: "Video sobre atlantidad.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* SANTA BÁRBARA */
+    /* ========================================= */
+
+    santaBarbara: {
+
+        nombre: "Santa Bárbara",
+
+        texto: "Creado en la fundación inicial del 28 de junio de 1825. Ha tenido un rol histórico clave en la artesanía tradicional, el comercio y la producción de junco.",
+
+        lugares: [
+
+            {
+                imagen: "El Lago de Yojoa.png",
+                titulo: "El Lago de Yojoa",
+                descripcion: "El Lago de Yojoa es el único lago natural de origen volcánico en Honduras."
+            },
+
+            {
+                imagen: "Parque Nacional Santa Bárbara.png",
+                titulo: "Parque Nacional Santa Bárbara",
+                descripcion: "El Parque Nacional Montaña de Santa Bárbara es el cerro de piedra caliza más grande de Centroamérica."
+            },
+
+            {
+                imagen: "Centro Artesanal de Ilama y Santa Bárbara.png",
+                titulo: "Centro Artesanal de Ilama y Santa Bárbara",
+                descripcion: "El Centro Artesanal de Llama en Santa Bárbara es el secreto detrás de los vibrantes colores y diseños personalizados de sus famosas artesanías de junco."
+            }
+
+        ],
+
+        video: "video sobre santa barbara.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* COPÁN */
+    /* ========================================= */
+
+    copan: {
+
+        nombre: "Copán",
+
+        texto: "Fue creado el 28 de mayo de 1869 durante la administración del presidente José María Medina, desprendiéndose del antiguo departamento de Gracias (hoy Lempira) debido al crecimiento económico y poblacional de la zona cafetalera y arqueológica.",
+
+        lugares: [
+
+            {
+                imagen: "Parque Arqueológico Ruinas de Copán.png",
+                titulo: "Parque Arqueológico Ruinas de Copán",
+                descripcion: "La Escalinata Jeroglífica de las Ruinas de Copán contiene el texto grabado en piedra más largo de toda el área maya y de Mesoamérica."
+            },
+
+            {
+                imagen: "Los Sapos (sitio arqueológico ceremonial antiguo).png",
+                titulo: "Los Sapos",
+                descripcion: "El sitio arqueológico Los Sapos, ubicado muy cerca de las ruinas principales de Copán en Honduras, es considerado por los arqueólogos como la sala de partos más antigua que se conoce en Honduras."
+            },
+
+            {
+                imagen: "Aguas Termales de Copán.png",
+                titulo: "Aguas Termales de Copán",
+                descripcion: "Los nacimientos de agua principal de Luna Jaguar Aguas Termales y Spa alcanzan una temperatura de hasta 90 grados Celsius (190 grados Fahrenheit)."
+            }
+
+        ],
+
+        video: "video sobre copan.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* OCOTEPEQUE */
+    /* ========================================= */
+
+    ocotepeque: {
+
+        nombre: "Ocotepeque",
+
+        texto: "Creado originalmente en 1906, pero tras sufrir una gran inundación del río Lempa en 1934, la cabecera fue trasladada al valle de Sinuapa. Su configuración definitiva data de mediados del siglo XX.",
+
+        lugares: [
+
+            {
+                imagen: "La Laguna Azul.png",
+                titulo: "La Laguna Azul",
+                descripcion: "La Laguna Azul de Honduras es un misterioso cuerpo de agua que se seca por completo de manera repentina y luego vuelve a llenarse con el tiempo, sin que nazca ningún río en ella ni tenga drenajes visibles."
+            },
+
+            {
+                imagen: "Reserva Biológica Guisayote.png",
+                titulo: "Reserva Biológica Guisayote",
+                descripcion: "La Reserva Biológica Güisayote en Honduras es cruzada por la carretera pavimentada o vía terrestre más alta del país, alcanzando los 2,025 metros sobre el nivel del mar en la zona de El Portillo."
+            },
+
+            {
+                imagen: "El Trifinio (Montecristo).png",
+                titulo: "El Trifinio (Montecristo)",
+                descripcion: "En el Punto Trifinio en el cerro Montecristo, si te paras sobre el mojón o bloque de concreto que marca la frontera en la cumbre a 2,418 metros de altura, puedes estar en tres países a la vez (Honduras, Guatemala y El Salvador)."
+            }
+
+        ],
+
+        video: "video sobre ocotepeque.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* LEMPIRA */
+    /* ========================================= */
+
+    lempira: {
+
+        nombre: "Lempira",
+
+        texto: "Originalmente denominado departamento de Gracias en 1825. El 20 de febrero de 1943 cambió su nombre a Lempira en memoria del cacique lenca que combatió a los conquistadores españoles.",
+
+        lugares: [
+
+            {
+                imagen: "Parque Nacional Celaque.png",
+                titulo: "Parque Nacional Celaque",
+                descripcion: "El Parque Nacional Montaña de Celaque alberga el punto más alto de Honduras (el Cerro Las Minas a 2,849 msnm) y su nombre en lengua lenca significa «Caja de Agua»."
+            },
+
+            {
+                imagen: "Ciudad Colonial de Gracias.png",
+                titulo: "Ciudad Colonial de Gracias",
+                descripcion: "La ciudad colonial de Gracias, en Lempira, fue la sede de la Real Audiencia de los Confines en 1544, convirtiéndose por un tiempo en el centro del poder judicial y administrativo de toda Centroamérica, desde Chiapas hasta Panamá."
+            },
+
+            {
+                imagen: "Balneario de Aguas Termales de Gracias.png",
+                titulo: "Balneario de Aguas Termales de Gracias",
+                descripcion: "Las Aguas Termales Presidente (también conocidas como de Arcilaca) en Gracias, Lempira, fueron fundadas oficialmente en 1966 gracias al esfuerzo y trabajo de la propia comunidad local."
+            }
+
+        ],
+
+        video: "video sobre lempira.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* INTIBUCÁ */
+    /* ========================================= */
+
+    intibuca: {
+
+        nombre: "Intibucá",
+
+        texto: "Fue erigido como departamento el 16 de abril de 1866, separando y uniendo comunidades de los departamentos de Lempira (Gracias) y Paz para potenciar el desarrollo de la meseta lenca.",
+
+        lugares: [
+
+            {
+                imagen: "La Gruta de La Esperanza.png",
+                titulo: "La Gruta de La Esperanza",
+                descripcion: "La icónica Gruta de La Esperanza en Intibucá fue construida en 1934 por reclusos y vecinos de la zona como una promesa religiosa."
+            },
+
+            {
+                imagen: "Bosque Enano de La Esperanza.png",
+                titulo: "Bosque Enano de La Esperanza",
+                descripcion: "El Bosque Enano de La Esperanza en Intibucá alberga árboles con más de 100 o hasta 300 años de antigüedad que miden un máximo de 30 centímetros de altura, creciendo de forma horizontal a estilo bonsái natural debido a la escasez de nutrientes del suelo rocoso."
+            },
+
+            {
+                imagen: "Laguna de Chiligatoro.png",
+                titulo: "Laguna de Chiligatoro",
+                descripcion: "La Laguna de Chiligatoro no es un cuerpo de agua natural, sino que fue construida artificialmente en 1962 por los habitantes de la comunidad lenca."
+            }
+
+        ],
+
+        video: "video sobre intibuca.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* COMAYAGUA */
+    /* ========================================= */
+
+    comayagua: {
+
+        nombre: "Comayagua",
+
+        texto: "Su origen data de la primera división política del Estado de Honduras realizada el 28 de junio de 1825 por Dionisio de Herrera. Fue la antigua capital política de Honduras y escenario central de la historia independentista y colonial.",
+
+        lugares: [
+
+            {
+                imagen: "Catedral de la Inmaculada Concepción (famosa por albergar el reloj más antiguo de América funcionando).png",
+                titulo: "Catedral de la Inmaculada Concepción",
+                descripcion: "El reloj de la Catedral de la Inmaculada Concepción en Comayagua, Honduras, funciona completamente sin electricidad ni pilas, operando solo con un sistema mecánico de engranajes, pesas y la fuerza de la gravedad."
+            },
+
+            {
+                imagen: "Las Cuevas de Taulabé (sistema de grutas subterráneas con formaciones de estalactitas y estalagmitas).png",
+                titulo: "Las Cuevas de Taulabé",
+                descripcion: "Las Cuevas de Taulabé no son una sola caverna aislada, sino un sistema oculto de 24 cavernas naturales distribuidas por todo el municipio en Comayagua, Honduras."
+            },
+
+            {
+                imagen: "Caxa Real y el centro histórico colonial de Comayagua.png",
+                titulo: "La Caxa Real y el centro histórico colonial de Comayagua.",
+                descripcion: "Es conocida popularmente como la Casa de la Moneda, pero un dato muy curioso es que nunca se acuñó moneda en su interior; su función real era almacenar y custodiar los tributos y metales preciosos (como el oro y la plata del quinto real) antes de enviarlos a España."
+            }
+
+        ],
+
+        video: "video sobre comayagua.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* YORO */
+    /* ========================================= */
+
+    yoro: {
+
+        nombre: "Yoro",
+
+        texto: "Establecido oficialmente en la primera división territorial del 28 de junio de 1825. Es una zona de gran relevancia agrícola, forestal y cultural en el centro-norte del país.",
+
+        lugares: [
+
+            {
+                imagen: "Parque Nacional Montaña de Yoro.png",
+                titulo: "Parque Nacional Montaña de Yoro",
+                descripcion: "El Parque Nacional Montaña de Yoro es famoso mundialmente por ser el escenario de la insólita lluvia de peces, un fenómeno en el que cada año caen cientos de peces vivos del cielo durante una fuerte tormenta."
+            },
+
+            {
+                imagen: "Museo Ferroviario en El Progreso.png",
+                titulo: "Museo Ferroviario en El Progreso",
+                descripcion: "El Museo Ferroviario en El Progreso, Yoro, es el único museo especializado en la historia ferroviaria en todo Honduras"
+            },
+
+            {
+                imagen: "Aguas Termales de Sulaco.png",
+                titulo: "Aguas Termales de Sulaco",
+                descripcion: "las aguas termales en Sulaco, Yoro, es que brotan directamente desde el interior de una cueva conocida como el Puente Natural de San Antonio, cayendo en forma de un chorro caliente que contrasta con la frescura del río que cruza el lugar."
+            }
+
+        ],
+
+        video: "video sobre yoro.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* OLANCHO */
+    /* ========================================= */
+
+    olancho: {
+
+        nombre: "Olancho",
+
+        texto: "Establecido en la primera división política del 28 de junio de 1825. Es el departamento más extenso territorialmente de Honduras, caracterizado por su rica tradición ganadera, su historia y su relieve montañoso.",
+
+        lugares: [
+
+            {
+                imagen: "Cuevas de Talgua en Catacamas.png",
+                titulo: "Cuevas de Talgua en Catacamas",
+                descripcion: "Las Cuevas de Talgua en Catacamas, Olancho, también son conocidas como la Cueva de las Calaveras Brillantes porque los restos óseos antiguos tienen depósitos de cristales de calcita que brillan cuando la luz les pega."
+            },
+
+            {
+                imagen: "Parque Nacional Sierra de Agalta.png",
+                titulo: "Parque Nacional Sierra de Agalta",
+                descripcion: "El Parque Nacional Sierra de Agalta alberga el bosque nuboso más extenso y alto de todo el departamento de Olancho, además de ser el más oriental de Honduras."
+            },
+
+            {
+                imagen: "Río Patuca.png",
+                titulo: "Río Patuca",
+                descripcion: "El Río Patuca es el río más largo de Honduras y el segundo más grande de toda Centroamérica, con una longitud cercana a los 500 o 540 kilómetros."
+            }
+
+        ],
+
+        video: "video sobre olancho.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* FRANCISCO MORAZÁN */
+    /* ========================================= */
+
+    francisco: {
+
+        nombre: "Francisco Morazán",
+
+        texto: "Originalmente llamado departamento de Tegucigalpa en la fundación de 1825. El 7 de marzo de 1943 cambió su nombre oficial a Francisco Morazán en honor al máximo héroe unionista centroamericano.",
+
+        lugares: [
+
+            {
+                imagen: "Parque Nacional La Tigra.png",
+                titulo: "Parque Nacional La Tigra",
+                descripcion: "El Parque Nacional La Tigra fue el primer parque nacional de Honduras, declarado oficialmente el 1 de enero de 1980."
+            },
+
+            {
+                imagen: "Pueblos Encantados de Valle de Ángeles y Santa Lucía.png",
+                titulo: "Pueblos Encantados de Valle de Ángeles y Santa Lucía",
+                descripcion: "Valle de Ángeles y Santa Lucía guardan historias fascinantes, como el curioso pasado de Valle de Ángeles, que antes del siglo XIX era conocido popularmente con los nombres de La Marranera” y “El Cimarrón."
+            },
+
+            {
+                imagen: "Basílica de Nuestra Señora de Suyapa en Tegucigalpa.png",
+                titulo: "La Basílica de Nuestra Señora de Suyapa en Tegucigalpa",
+                descripcion: "Tiene una capacidad para albergar a unas 10,000 personas en su nave central, lo que la convierte en una de las construcciones religiosas más grandes de la región centroamericana."
+            }
+
+        ],
+
+        video: "video sobre francisco morazan.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* LA PAZ */
+    /* ========================================= */
+
+    lapaz: {
+
+        nombre: "La Paz",
+
+        texto: "Se constituyó como departamento el 28 de mayo de 1869, segregándose del territorio que administrativamente dependía de Comayagua.",
+
+        lugares: [
+
+            {
+                imagen: "La Ruta del Café en Marcala.png",
+                titulo: "La Ruta del Café en Marcala",
+                descripcion: "Un dato interesante sobre la Ruta del Café en Marcala, Honduras, es que fue la primera región en toda Centroamérica y el Caribe en obtener una Denominación de Origen (D.O.) para su café."
+            },
+
+            {
+                imagen: "Cascada La Estanzuela.png",
+                titulo: "Cascada La Estanzuela",
+                descripcion: "La Cascada La Estanzuela cambia drásticamente su caudal según la temporada, luciendo como un imponente manto blanco en invierno y disminuyendo de forma drástica durante el verano."
+            },
+
+            {
+                imagen: "Grutas de Guajiquiro.png",
+                titulo: "Grutas de Guajiquiro",
+                descripcion: "Un dato intesante sobre el entorno natural y geológico de Guajiquiro es que, según una leyenda local, una parte del terreno original de Guajiquiro sufrió un hundimiento masivo, pero el desprendimiento de tierra no cesó en esa zona, lo que provocó que quedara una enorme y compacta masa de tierra expuesta en forma de piedra que sobresale visiblemente sobre todo el relieve circundante."
+            }
+
+        ],
+
+        video: "video sobre la paz.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* EL PARAÍSO */
+    /* ========================================= */
+
+    paraiso: {
+
+        nombre: "El Paraíso",
+
+        texto: "Creado el 28 de mayo de 1869 mediante decreto legislativo, uniendo regiones que antes pertenecían a Tegucigalpa (hoy Francisco Morazán) y Olancho. Su cabecera es Yuscarán.",
+
+        lugares: [
+
+            {
+                imagen: "Pueblo Histórico de Yuscarán.png",
+                titulo: "Pueblo Histórico de Yuscarán",
+                descripcion: "Yuscarán guarda una conexión directa con el héroe nacional de Honduras, ya que el abuelo de Francisco Morazán, Juan Bautista Morazán, llegó desde Córcega (Europa) a instalarse a la zona minera cercana a este pueblo para realizar actividades comerciales."
+            },
+
+            {
+                imagen: "Jardías y reservas biológicas de la Montaña de Montserrat.png",
+                titulo: "Jardías y reservas biológicas de la Montaña de Montserrat",
+                descripcion: "La Reserva Biológica Monserrat (también llamada cerro Montserrat), ubicada en las cercanías de Yuscarán, El Paraíso, destaca porque en su bosque nublado habita una gran variedad de orquídeas y es resguardada de manera permanente por militares y pobladores locales."
+            },
+
+            {
+                imagen: "Cuevas de Ayasta (sitio con arte rupestre ancestral).png",
+                titulo: "Cuevas de Ayasta",
+                descripcion: "Las Cuevas de Ayasta no son en realidad cavernas profundas, sino abrigos rocosos formados por cuatro oquedades poco profundas en paredes de piedra caliza."
+            }
+
+
+        ],
+
+        video: "video sobre el paraíso.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* VALLE */
+    /* ========================================= */
+
+    valle: {
+
+        nombre: "Valle",
+
+        texto: "Fue creado el 4 de julio de 1893 bajo la presidencia de Domingo Vásquez, separando su territorio de la costa del Golfo de Fonseca que antes pertenecía a Choluteca. Su cabecera es Nacaome.",
+
+        lugares: [
+
+            {
+                imagen: "Isla de Amapala (Isla del Tigre).png",
+                titulo: "Isla de Amapala (Isla del Tigre)",
+                descripcion: "Un dato interesante de la Isla de Amapala en la Isla del Tigre es que Albert Einstein hizo una breve escala en este puerto del Pacífico el 22 de diciembre de 1931, durante un viaje en barco, y permaneció unas horas en tierra antes de continuar su travesía."
+            },
+
+            {
+                imagen: "San Lorenzo (conocido como el puerto gastronómico del sur, famoso por sus mariscos y manglares).png",
+                titulo: "San Lorenzo",
+                descripcion: "San Lorenzo, Valle fue fundado por los conquistadores españoles en el año 1522 como una aldea para buscar rutas hacia el mar del sur y comerciar con las Indias."
+            },
+
+            {
+                imagen: "Playas de Cedeño (sitio tradicional de descanso frente al Golfo de Fonseca).png",
+                titulo: "Playas de Cedeño",
+                descripcion: "Un dato preocupante sobre las Playas de Cedeño es que el mar ha avanzado más de 130 metros tierra adentro en las últimas décadas, haciendo que calles, hoteles, negocios y hasta un centro de salud que antes estaban lejos de la costa hoy queden bajo el agua."
+            }
+
+        ],
+
+        video: "video sobre valle.mp4"
+
+    },
+
+
+    /* ========================================= */
+    /* CHOLUTECA */
+    /* ========================================= */
+
+    choluteca: {
+
+        nombre: "Choluteca",
+
+        texto: "Establecido también en la primera división política del 28 de junio de 1825. Es conocido históricamente como la Ciudad de la Zafra y cuna de importantes próceres nacionales como José Cecilio del Valle.",
+
+        lugares: [
+
+            {
+                imagen: "Puente Colgante de Choluteca.png",
+                titulo: "Puente Colgante de Choluteca",
+                descripcion: "También conocido como puente Carías, es una de las pocas réplicas del famoso puente Golden Gate de San Francisco que todavía se conservan en el mundo."
+            },
+
+            {
+                imagen: "Centro Histórico de Choluteca (casas coloniales muy bien conservadas).png",
+                titulo: "Centro Histórico de Choluteca",
+                descripcion: "Alberga la famosa Casa Valle, construida alrededor de 1756, donde nació el 22 de noviembre de 1777 don José Cecilio del Valle, el sabio redactor del Acta de Independencia de Centroamérica."
+            },
+
+            {
+                imagen: "San Marcos de Colón y su Cañón de Caulato.png",
+                titulo: "San Marcos de Colón y su Cañón de Caulato",
+                descripcion: "El Cañón de Caulato en San Marcos de Colón desafía el calor típico del sur de Honduras al albergar pozas de un intenso color verde esmeralda resguardadas por enormes paredes de roca gris."
+		    }
+],  
+
+        video: "video sobre choluteca.mp4"
+
+    },
+
+};
+
+
+
+/* ================================================= */
+/* FUNCIÓN PARA MOSTRAR LA INFORMACIÓN */
+/* ================================================= */
+
+function mostrarDepartamento(codigo) {
+
+
+    let departamento = departamentos[codigo];
+
+
+    /* ----------------------------------------- */
+    /* PONER NOMBRE DEL DEPARTAMENTO */
+    /* ----------------------------------------- */
+
+   document.getElementById("titulo").innerHTML =
+    `<marquee behavior="scroll" direction="left">${departamento.nombre}</marquee>`;
+
+
+
+    /* ----------------------------------------- */
+    /* CREAR EL CONTENIDO */
+    /* ----------------------------------------- */
+
+    let contenidoHTML = `
+
+        <p>
+            ${departamento.texto}
+        </p>
+
+
+        <h3 class="subtitulo-lugares">
+
+            Entre sus principales lugares turísticos
+            se encuentran:
+
+        </h3>
+
+
+        <div class="tarjetas">
+
+    `;
+
+
+
+    /* ----------------------------------------- */
+    /* CREAR LAS 3 TARJETAS */
+    /* ----------------------------------------- */
+
+    departamento.lugares.forEach(function(lugar) {
+
+
+        contenidoHTML += `
+
+            <div class="tarjeta">
+
+
+                <img
+                    src="${lugar.imagen}"
+                    alt="${lugar.titulo}"
+                >
+
+
+                <h3>
+                    ${lugar.titulo}
+                </h3>
+
+
+                <p>
+                    ${lugar.descripcion}
+                </p>
+
+
+            </div>
+
+        `;
+
+    });
+
+
+
+    /* ----------------------------------------- */
+    /* AGREGAR VIDEO */
+    /* ----------------------------------------- */
+
+    contenidoHTML += `
+
+        </div>
+
+
+        <h3 class="titulo-video">
+
+            Video sobre ${departamento.nombre}
+
+        </h3>
+
+
+        <video
+            class="video-local"
+            controls
+        >
+
+            <source
+                src="${departamento.video}"
+                type="video/mp4"
+            >
+
+            Tu navegador no soporta la reproducción
+            de videos.
+
+        </video>
+
+    `;
+
+
+
+    /* ----------------------------------------- */
+    /* COLOCAR CONTENIDO EN LA VENTANA */
+    /* ----------------------------------------- */
+
+    document.getElementById("cuerpo-info").innerHTML =
+        contenidoHTML;
+	    // Controlar la música de fondo y el video
+    const musica = document.getElementById("musica-fondo");
+    const video = document.querySelector("#cuerpo-info video");
+
+    if (musica) {
+        // Si se reproduce un video, detener la música
+        if (video) {
+            video.addEventListener("play", function() {
+                musica.pause();
+            });
+
+            // Reanudar la música al pausar o terminar el video
+            function reanudarMusica() {
+                if (video.paused || video.ended) {
+                    musica.play().catch(() => {});
+                }
+            }
+
+            video.addEventListener("pause", reanudarMusica);
+            video.addEventListener("ended", reanudarMusica);
+        }
+
+        // Intentar iniciar la música al abrir un departamento
+        musica.play().catch(() => {});
+    }
+
+
+
+    /* ----------------------------------------- */
+    /* MOSTRAR FONDO OSCURO */
+    /* ----------------------------------------- */
+
+    document.getElementById("fondo-modal").style.display =
+        "block";
+
+
+
+    /* ----------------------------------------- */
+    /* MOSTRAR VENTANA */
+    /* ----------------------------------------- */
+
+    document.getElementById("informacion").style.display =
+        "block";
+
+}
+
+
+
+/* ================================================= */
+/* FUNCIÓN PARA CERRAR LA VENTANA */
+/* ================================================= */
+
+function cerrarInfo() {
+
+
+    /* Ocultar ventana */
+
+    document.getElementById("informacion").style.display =
+        "none";
+
+
+    /* Ocultar fondo */
+
+    document.getElementById("fondo-modal").style.display =
+        "none";
+
+
+    /* Limpiar contenido */
+
+    document.getElementById("cuerpo-info").innerHTML =
+        "";
+
+}
+
+</script>
+<script>
+// La navegación desplaza únicamente el panel derecho; la barra lateral permanece fija.
+document.querySelectorAll('.nav-links a, .hero-button').forEach(function(enlace) {
+  enlace.addEventListener('click', function() {
+    if (enlace.classList.contains('nav-links')) return;
+    document.querySelectorAll('.nav-links a').forEach(function(item) { item.classList.remove('active'); });
+    var destino = enlace.getAttribute('href');
+    var activo = document.querySelector('.nav-links a[href="' + destino + '"]');
+    if (activo) activo.classList.add('active');
+  });
+});
+var panelContenido = document.getElementById('contenido-principal');
+var enlacesNav = document.querySelectorAll('.nav-links a');
+panelContenido.addEventListener('scroll', function() {
+  var actual = 'inicio';
+
+  ['inicio', 'departamentos', 'lugares', 'simbolos', 'proceres'].forEach(function(id) {
+    var seccion = document.getElementById(id);
+
+    if (seccion && seccion.getBoundingClientRect().top < window.innerHeight * 0.42) {
+      actual = id;
+    }
+  });
+
+  enlacesNav.forEach(function(enlace) {
+    enlace.classList.toggle(
+      'active',
+      enlace.getAttribute('href') === '#' + actual
+    );
+  });
+});
+</script>
+</body>
+</html>
